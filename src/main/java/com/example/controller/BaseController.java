@@ -66,7 +66,13 @@ public class BaseController {
 
     private HandlerFunction<ServerResponse> deleteHouse = request -> ok().body(houseService.deleteHouse(request.pathVariable("id")), String.class);
 
-    private HandlerFunction<ServerResponse> addHouse = request -> ok().body(houseService.addHouse(request.queryParams("title").get(0)), House.class);
+    private HandlerFunction<ServerResponse> addHouse = request -> ok().body(addAHouse(request), House.class);
+
+    private Mono<House> addAHouse(ServerRequest request) {
+        String title = request.queryParams("title").get(0);
+        String quote = request.queryParams("quote").get(0);
+        return houseService.addHouse(title, quote);
+    }
 
     private HandlerFunction<ServerResponse> addCharacter = request -> ok().body(addACharacter(request), House.class);
 
@@ -74,8 +80,9 @@ public class BaseController {
 
     private Mono<House> addACharacter(ServerRequest request) {
         String houseId = request.queryParams("houseId").get(0);
-        String content = request.queryParams("content").get(0);
-        return characterService.addCharacterToHouse(houseId, content);
+        String name = request.queryParams("name").get(0);
+        String quote = request.queryParams("quote").get(0);
+        return characterService.addCharacterToHouse(houseId, name, quote);
     }
 
     private HandlerFunction<ServerResponse> getAllCharacters = request -> ok().body(characterService.findAllCharacters(), Character.class);

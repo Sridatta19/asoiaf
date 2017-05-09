@@ -25,12 +25,15 @@ public class House {
 
     private String title;
 
+    private String quote;
+
     private String sigilImage;
 
     private List<Character> characters = new ArrayList<>();
 
-    public House(String houseTitle){
+    public House(String houseTitle, String quote){
         this.title = houseTitle;
+        this.quote = quote;
     }
 
     public House addCharacter(Character character){

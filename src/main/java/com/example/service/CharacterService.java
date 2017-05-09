@@ -29,8 +29,8 @@ public class CharacterService {
         return characterRepository.findById(characterId);
     }
 
-    public Mono<House> addCharacterToHouse(String houseId, String content){
-        Mono<Character> character = Mono.just(new Character(houseId, content)).flatMap(characterRepository::save);
+    public Mono<House> addCharacterToHouse(String houseId, String name, String quote){
+        Mono<Character> character = Mono.just(new Character(houseId, name, quote)).flatMap(characterRepository::save);
         Mono<House> house = houseRepository.findById(houseId);
         return Flux.zip(character, house).map(a -> a.getT2().addCharacter(a.getT1())).flatMap(houseRepository::save).singleOrEmpty();
     }

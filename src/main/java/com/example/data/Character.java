@@ -22,15 +22,18 @@ public class Character {
 
     private String name;
 
+    private String quote;
+
     private String avatar;
 
     private int likes;
 
     private String houseId;
 
-    public Character(String houseId, String name){
+    public Character(String houseId, String name, String quote){
         this.name = name;
         this.houseId = houseId;
+        this.quote = quote;
     }
 
     public void like(){
