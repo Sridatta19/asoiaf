@@ -39,10 +39,6 @@ public class CharacterService {
         return characterRepository.findById(id).doOnNext(Character::like).flatMap(characterRepository::save);
     }
 
-    public Mono<Void> deleteCharacter(String objectId){
-        return characterRepository.deleteById(objectId);
-    }
-
     public Flux<Character> findByHouseId(String houseId) {
         return characterRepository.findAll().filter(l -> l.getHouseId().equals(houseId));
     }

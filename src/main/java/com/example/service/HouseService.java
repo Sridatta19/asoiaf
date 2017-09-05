@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 /**
  * Created by sridattap on 08/05/17.
@@ -34,7 +35,15 @@ public class HouseService {
     }
 
     public Mono<String> deleteHouse(String houseId){
-        characterRepository.findAll().filter(c -> c.getHouseId().equals(houseId)).doOnNext(characterRepository::delete).subscribe();
-        return houseRepository.deleteById(houseId).map(m -> "Successfully Deleted");
+        final Mono<Void> found = characterRepository.findAll()
+                .filter(c -> {
+                    return c.getHouseId().equals(houseId);
+                })
+                .flatMap(characterRepository::delete)
+                .singleOrEmpty();
+        Mono<Void> house = houseRepository.deleteById(houseId);
+        return Flux.zip(found, house)
+                   .singleOrEmpty()
+                   .map(c -> "Successfully Deleted");
     }
 }
